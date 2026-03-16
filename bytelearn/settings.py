@@ -124,3 +124,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CSRF_TRUSTED_ORIGINS = [
     'https://bytelearn-production.up.railway.app',
 ]
+ALLOWED_HOSTS = ['*']
