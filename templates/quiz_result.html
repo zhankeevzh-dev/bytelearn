@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="max-width:500px; margin:0 auto; text-align:center; padding-top:40px;">
+    <div style="background:#1a1a2e; border-radius:24px; padding:48px; border:1px solid #ffffff10;">
+        {% if percent >= 80 %}
+            <div style="font-size:4rem;">🎉</div>
+            <h2 style="font-weight:800; margin-top:16px;">Керемет!</h2>
+        {% elif percent >= 50 %}
+            <div style="font-size:4rem;">👍</div>
+            <h2 style="font-weight:800; margin-top:16px;">Жақсы!</h2>
+        {% else %}
+            <div style="font-size:4rem;">📚</div>
+            <h2 style="font-weight:800; margin-top:16px;">Қайта оқы!</h2>
+        {% endif %}
+
+        <div style="font-size:3rem; font-weight:800; background:linear-gradient(135deg,#6c63ff,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent; margin:16px 0;">
+            {{ score }}/{{ total }}
+        </div>
+        <p style="color:#888;">{{ percent }}% дұрыс жауап</p>
+
+        <div style="display:flex; gap:12px; justify-content:center; margin-top:24px;">
+            <a href="{% url 'quiz' course.pk %}" class="btn-outline-glow" style="padding:10px 20px; text-decoration:none;">Қайта тапсыру</a>
+            <a href="{% url 'lesson_list' course.pk %}" class="btn-glow" style="padding:10px 20px; text-decoration:none;">Курсқа қайту</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

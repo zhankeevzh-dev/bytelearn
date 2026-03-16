@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <div>
+        <h2 style="font-weight:800; margin-bottom:4px;">💬 Форум</h2>
+        <p style="color:#888; margin:0;">{{ course.title }}</p>
+    </div>
+    <a href="{% url 'lesson_list' course.pk %}" class="btn-outline-glow" style="text-decoration:none; padding:8px 16px;">← Курсқа қайту</a>
+</div>
+
+<div style="background:#1a1a2e; border-radius:16px; padding:20px; margin-bottom:24px; border:1px solid #ffffff10;">
+    <form method="POST">
+        {% csrf_token %}
+        <textarea name="message" rows="3" style="background:#0f0f1a; border:1px solid #ffffff20; color:#fff; border-radius:10px; padding:12px; width:100%; margin-bottom:12px;" placeholder="Сұрағыңызды немесе пікіріңізді жазыңыз..."></textarea>
+        <button class="btn-glow" style="padding:10px 24px; border:none; cursor:pointer;">Жіберу</button>
+    </form>
+</div>
+
+<div style="display:flex; flex-direction:column; gap:12px;">
+    {% for post in posts %}
+    <div style="background:#1a1a2e; border-radius:14px; padding:20px; border:1px solid #ffffff10;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+            <span style="font-weight:700; color:#6c63ff;">{{ post.user.username }}</span>
+            <span style="color:#555; font-size:0.8rem;">{{ post.created_at|date:"d.m.Y H:i" }}</span>
+        </div>
+        <p style="color:#ccc; margin:0;">{{ post.message }}</p>
+    </div>
+    {% empty %}
+    <div style="text-align:center; color:#666; padding:40px;">
+        Әзірше хабарлама жоқ. Бірінші болып жаз! 💬
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

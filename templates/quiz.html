@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 style="font-weight:800; margin-bottom:8px;">🧪 {{ quiz.title }}</h2>
+<p style="color:#888; margin-bottom:28px;">{{ course.title }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+    {% for question in questions %}
+    <div style="background:#1a1a2e; border-radius:16px; padding:24px; margin-bottom:16px; border:1px solid #ffffff10;">
+        <h6 style="font-weight:700; margin-bottom:16px;">{{ forloop.counter }}. {{ question.text }}</h6>
+        {% for answer in question.answer_set.all %}
+        <label style="display:flex; align-items:center; gap:12px; padding:10px; border-radius:8px; cursor:pointer; margin-bottom:8px; border:1px solid #ffffff10;">
+            <input type="radio" name="q_{{ question.id }}" value="{{ answer.id }}" style="width:16px; height:16px; accent-color:#6c63ff;">
+            <span style="color:#ccc;">{{ answer.text }}</span>
+        </label>
+        {% endfor %}
+    </div>
+    {% endfor %}
+    <button class="btn-glow" style="padding:12px 32px; border:none; cursor:pointer; font-size:1rem;">
+        Тапсыру →
+    </button>
+</form>
+{% endblock %}

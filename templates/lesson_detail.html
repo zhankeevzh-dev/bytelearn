@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row g-5">
+    <div class="col-md-8">
+        <p style="color:#6c63ff; font-size:0.9rem; margin-bottom:8px;">
+            <a href="{% url 'lesson_list' course.pk %}" style="color:#6c63ff;">← {{ course.title }}</a>
+        </p>
+        <h2 style="font-weight:800;">{{ lesson.title }}</h2>
+
+        {% if lesson.video_url %}
+        <div style="margin:24px 0; border-radius:16px; overflow:hidden;">
+           <iframe width="100%" height="400" 
+    src="{{ lesson.video_url }}"
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen 
+    style="border-radius:16px;">
+</iframe>
+        </div>
+        {% endif %}
+
+        <div style="background:#1a1a2e; border-radius:16px; padding:28px; margin-top:20px; color:#ccc; line-height:1.8;">
+            {{ lesson.content|linebreaks }}
+        </div>
+
+        <form method="POST" style="margin-top:24px;">
+            {% csrf_token %}
+            {% if progress.completed %}
+                <button class="btn" style="background:#ffffff10; color:#aaa; border-radius:12px; padding:12px 28px;" disabled>
+                    ✓ Аяқталды
+                </button>
+            {% else %}
+                <button class="btn btn-glow" style="padding:12px 32px; font-size:1rem;">
+                    Аяқтап, келесіге өту →
+                </button>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="col-md-4">
+        <div style="background:#1a1a2e; border-radius:16px; padding:20px;">
+            <h6 style="font-weight:700; margin-bottom:16px;">Сабақтар</h6>
+            {% for l in lessons %}
+            <a href="{% url 'lesson_detail' course.pk l.pk %}" style="text-decoration:none;">
+                <div style="padding:10px; border-radius:8px; margin-bottom:6px; background:{% if l.pk == lesson.pk %}#6c63ff20{% else %}transparent{% endif %}; color:{% if l.pk == lesson.pk %}#fff{% else %}#888{% endif %}; font-size:0.9rem;">
+                    {{ forloop.counter }}. {{ l.title }}
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

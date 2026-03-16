@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 style="font-weight:800; margin-bottom:28px;">🏅 Жетістіктер</h2>
+<div class="row g-4">
+    {% for achievement in all_achievements %}
+    <div class="col-md-4">
+        <div style="background:#1a1a2e; border-radius:16px; padding:24px; text-align:center; border:2px solid {% if achievement.id in earned %}#6c63ff{% else %}#ffffff10{% endif %}; opacity:{% if achievement.id in earned %}1{% else %}0.4{% endif %};">
+            <div style="font-size:3rem;">{{ achievement.icon }}</div>
+            <h5 style="font-weight:700; margin-top:12px;">{{ achievement.name }}</h5>
+            <p style="color:#888; font-size:0.85rem;">{{ achievement.description }}</p>
+            {% if achievement.id in earned %}
+            <span style="background:#6c63ff20; color:#6c63ff; padding:4px 12px; border-radius:20px; font-size:0.8rem;">✓ Алынды</span>
+            {% else %}
+            <span style="color:#555; font-size:0.8rem;">Әлі алынбады</span>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <p style="color:#666;">Admin панельден жетістіктер қос!</p>
+    {% endfor %}
+</div>
+{% endblock %}

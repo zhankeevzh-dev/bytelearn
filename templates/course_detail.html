@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row g-5">
+    <div class="col-md-8">
+        <span class="badge-cat">{{ course.category }}</span>
+        <h1 style="font-weight:800; margin-top:16px;">{{ course.title }}</h1>
+        <p style="color:#aaa; font-size:1rem; margin-top:12px;">{{ course.description }}</p>
+        <div class="d-flex gap-3 mt-3" style="color:#888; font-size:0.9rem;">
+            <span>📚 {{ course.lesson_count }} сабақ</span>
+            <span>📊 {{ course.get_level_display }}</span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div style="background:#1a1a2e; border:1px solid #ffffff15; border-radius:20px; padding:28px;">
+            <div class="price-tag" style="font-size:2rem;">{{ course.price }} ₸</div>
+           {% if user.is_authenticated %}
+    {% if is_enrolled %}
+        <a href="{% url 'lesson_list' course.pk %}" class="btn-glow" style="display:block; text-align:center; padding:12px; text-decoration:none; margin-top:16px;">
+            Оқуды жалғастыру →
+        </a>
+    {% else %}
+        {% if course.price == 0 %}
+            <a href="{% url 'enroll' course.pk %}" class="btn-glow" style="display:block; text-align:center; padding:12px; text-decoration:none; margin-top:16px;">
+                Тегін жазылу
+            </a>
+        {% else %}
+            <div style="margin-top:16px;">
+                <div style="background:#0f0f1a; border-radius:12px; padding:16px; margin-bottom:12px; text-align:center;">
+                    <p style="color:#aaa; font-size:0.85rem; margin-bottom:8px;">Kaspi арқылы төлеу:</p>
+                    <div style="background:#fff; border-radius:8px; padding:12px; display:inline-block;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://kaspi.kz/pay/ByteLearn?amount={{ course.price }}" width="120" height="120" alt="Kaspi QR">
+                    </div>
+                    <p style="color:#555; font-size:0.75rem; margin-top:8px;">Kaspi.kz арқылы {{ course.price }} ₸ төлеңіз</p>
+                </div>
+                <a href="{% url 'enroll' course.pk %}" class="btn-glow" style="display:block; text-align:center; padding:12px; text-decoration:none;">
+                    Төлем жасадым ✓
+                </a>
+            </div>
+        {% endif %}
+    {% endif %}
+{% else %}
+    <a href="/login/" class="btn-glow" style="display:block; text-align:center; padding:12px; text-decoration:none; margin-top:16px;">
+        Кіру керек
+    </a>
+{% endif %}
+            <div style="margin-top:24px;">
+                <h6 style="font-weight:700; margin-bottom:12px;">Сабақтар:</h6>
+                {% for lesson in lessons %}
+                <div style="padding:10px; border-bottom:1px solid #ffffff10; color:#aaa; font-size:0.9rem;">
+                    {{ forloop.counter }}. {{ lesson.title }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Пікірлер -->
+<div style="margin-top:48px;">
+    <h4 style="font-weight:800; margin-bottom:8px;">
+        ⭐ Пікірлер
+        {% if avg_rating %}
+            <span style="color:#6c63ff; font-size:1rem;">{{ avg_rating|floatformat:1 }}/5</span>
+        {% endif %}
+    </h4>
+
+{% if user.is_authenticated and is_enrolled %}
+<div style="background:#1a1a2e; border-radius:16px; padding:24px; margin-bottom:24px;">
+    <h6 style="font-weight:700; margin-bottom:16px;">Пікір қалдыру</h6>
+    <form method="POST" action="{% url 'add_review' course.pk %}">
+        {% csrf_token %}
+        <div style="margin-bottom:16px;">
+            <label style="color:#aaa; font-size:0.85rem;">Рейтинг:</label><br>
+            <select name="rating" style="background:#0f0f1a; border:1px solid #ffffff20; color:#fff; border-radius:8px; padding:8px 12px; margin-top:8px;">
+                <option value="5">⭐⭐⭐⭐⭐ — Өте жақсы</option>
+                <option value="4">⭐⭐⭐⭐ — Жақсы</option>
+                <option value="3">⭐⭐⭐ — Орташа</option>
+                <option value="2">⭐⭐ — Нашар</option>
+                <option value="1">⭐ — Өте нашар</option>
+            </select>
+        </div>
+        <div style="margin-bottom:16px;">
+            <label style="color:#aaa; font-size:0.85rem;">Пікір:</label>
+            <textarea name="comment" rows="3" style="background:#0f0f1a; border:1px solid #ffffff20; color:#fff; border-radius:8px; padding:10px; width:100%; margin-top:8px;" placeholder="Пікіріңізді жазыңыз..."></textarea>
+        </div>
+        <button class="btn-glow" style="padding:10px 24px; border:none; cursor:pointer;">Жіберу</button>
+    </form>
+</div>
+{% endif %}
+
+    <div class="d-flex flex-column gap-3">
+        {% for review in reviews %}
+        <div style="background:#1a1a2e; border-radius:14px; padding:20px;">
+            <div class="d-flex justify-content-between">
+                <span style="font-weight:700;">{{ review.user.username }}</span>
+                <span style="color:#f5c518;">{{ review.rating }}★</span>
+            </div>
+            <p style="color:#aaa; margin-top:8px; font-size:0.9rem;">{{ review.comment }}</p>
+        </div>
+        {% empty %}
+        <p style="color:#666;">Әзірше пікір жоқ.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

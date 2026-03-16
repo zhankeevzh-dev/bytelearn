@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row g-4">
+    <div class="col-md-4">
+        <div style="background:#1a1a2e; border:1px solid #ffffff10; border-radius:20px; padding:32px; text-align:center;">
+            <div style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#6c63ff,#00d4ff); display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto 16px;">
+                {{ user.username|first|upper }}
+            </div>
+            <h4 style="font-weight:800;">{{ user.username }}</h4>
+            <p style="color:#888; font-size:0.9rem;">{{ user.email }}</p>
+            <div style="margin-top:20px; display:flex; justify-content:center; gap:32px;">
+                <div>
+                    <div style="font-size:1.5rem; font-weight:800; background:linear-gradient(135deg,#6c63ff,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">{{ enrollments.count }}</div>
+                    <div style="color:#888; font-size:0.85rem;">Курс</div>
+                </div>
+                <div>
+                    <div style="font-size:1.5rem; font-weight:800; background:linear-gradient(135deg,#6c63ff,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">{{ completed }}</div>
+                    <div style="color:#888; font-size:0.85rem;">Сабақ</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h5 style="font-weight:700; margin-bottom:20px;">Менің курстарым</h5>
+        <div class="d-flex flex-column gap-3">
+            {% for enrollment in enrollments %}
+            <div style="background:#1a1a2e; border:1px solid #ffffff10; border-radius:14px; padding:20px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <span class="badge-cat">{{ enrollment.course.category }}</span>
+                    <h6 style="font-weight:700; margin-top:8px;">{{ enrollment.course.title }}</h6>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'lesson_list' enrollment.course.pk %}" class="btn btn-glow" style="padding:8px 16px; font-size:0.85rem;">Жалғастыру</a>
+                    <a href="{% url 'certificate' enrollment.course.pk %}" class="btn btn-outline-glow" style="padding:8px 16px; font-size:0.85rem;">🏆</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

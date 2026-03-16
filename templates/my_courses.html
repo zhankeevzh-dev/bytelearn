@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 style="font-weight:800; margin-bottom:28px;">Менің курстарым</h2>
+<div class="row g-4">
+    {% for enrollment in enrollments %}
+    <div class="col-md-4">
+        <div class="course-card p-4 h-100">
+            <span class="badge-cat">{{ enrollment.course.category }}</span>
+            <h5 style="font-weight:700; margin-top:12px;">{{ enrollment.course.title }}</h5>
+            <p style="color:#888; font-size:0.9rem;">{{ enrollment.course.description|truncatewords:12 }}</p>
+            <a href="{% url 'lesson_list' enrollment.course.pk %}" class="btn btn-glow mt-2" style="padding:8px 20px;">
+                Жалғастыру →
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <div style="color:#666; text-align:center; padding:60px;">
+        Әзірше курс жоқ. <a href="/" style="color:#6c63ff;">Курстарды қарау</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

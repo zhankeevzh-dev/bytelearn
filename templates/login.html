@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="form-card">
+            <h3 style="font-weight:800; margin-bottom:8px;">Қош келдің 👋</h3>
+            <p style="color:#888; margin-bottom:28px;">Аккаунтыңа кір</p>
+            <form method="POST">
+                {% csrf_token %}
+                {% for field in form %}
+                <div style="margin-bottom:16px;">
+                    <label style="color:#aaa; font-size:0.85rem; margin-bottom:6px; display:block;">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.errors %}
+                    <div style="color:#ff6b6b; font-size:0.8rem; margin-top:4px;">
+                        {{ field.errors|join:", " }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <button class="btn btn-glow w-100 mt-2" style="padding:12px;">Кіру</button>
+            </form>
+            <p style="color:#666; text-align:center; margin-top:20px; font-size:0.9rem;">
+                Аккаунт жоқ па? <a href="/register/" style="color:#6c63ff;">Тіркелу</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
