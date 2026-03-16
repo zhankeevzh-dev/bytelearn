@@ -121,3 +121,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CSRF_TRUSTED_ORIGINS = [
+    'https://bytelearn-production.up.railway.app',
+]
